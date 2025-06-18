@@ -1,4 +1,4 @@
-from datasets import load_dataset
+from datasets import load_dataset, Dataset
 import dspy
 from dspy import Signature, InputField, OutputField
 import json
@@ -9,7 +9,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 def evaluate_medqa(solver):
-    test_data = load_dataset("bigbio/med_qa")["test"]#.select(range(10))
+    # Load and convert to list for length operations
+    test_data = list(load_dataset("bigbio/med_qa", split="test"))  # .select(range(10))
 
     def process_item(item):
         res = solver(
@@ -18,7 +19,7 @@ def evaluate_medqa(solver):
         )
 
         return res.answer.lower(), item["answer_idx"].lower(), res.reasoning
-    
+
     results = []
     with ThreadPoolExecutor(max_workers=8) as executor:
         futures = [executor.submit(process_item, item) for item in test_data]
@@ -41,7 +42,8 @@ def evaluate_medqa(solver):
         }
     )
     df.to_csv(
-        f"preds/medqa_predictions_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv", index=False
+        f"preds/medqa_predictions_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+        index=False,
     )
 
     # calculate accuracy using pandas
@@ -73,6 +75,7 @@ class MedQABaseline(Signature):
     answer = OutputField(
         description="The correct option among A-E. Just the letter, no other text."
     )
+
 
 # RAG prompt & equivalent module/signature
 RAG_PROMPT = """
