@@ -31,3 +31,8 @@ We used a chunk size of 800 tokens, consistent
 with other domains.
 
 [Dataset](https://huggingface.co/datasets/MedRAG/textbooks) has 125,847 datapoints which is different from the 64,117 mentioned in the paper. But I will use this, need to get some clarification (TODO) but this is good, I will just use this, maybe they did some weird filtering.
+
+## Results
+**GPT-4o**
+
+Baseline: 0.87

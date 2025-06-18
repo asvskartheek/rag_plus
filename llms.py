@@ -20,6 +20,5 @@ azure_gpt4o = LM(
     api_key=api_key,
     api_base=azure_endpoint,
     api_version=api_version,
-    model_type="chat",
-    cache=False
+    model_type="chat"
 )
